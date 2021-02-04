@@ -74,5 +74,32 @@ class CodeWriter {
   }
 
 }
-
 exports.CodeWriter = CodeWriter
+
+/**
+ * Returns the value of the tag in string format
+ * @return {string}
+ */
+function getStringTagValue(name, elem) {
+	for (i = 0; i < elem.tags.length; i++) {
+		if (elem.tags[i].name === name) {
+			return elem.tags[i].value;
+		}
+	}
+	return '';
+}
+exports.getStringTagValue = getStringTagValue
+
+/**
+ * Returns the value of the tag in boolean format
+ * @return {boolean}
+ */
+function getBooleanTagValue(name, elem) {
+	var value = getStringTagValue(name, elem)
+	if (value === "true") {
+		return true
+	} else {
+		return false
+	}
+}
+exports.getBooleanTagValue = getBooleanTagValue

@@ -112,6 +112,7 @@ class DDLGenerator {
     var self = this
     var line = self.getId(elem.name, options)
     var _type = elem.getTypeString()
+	var def_value = ''
     if (_type.trim().length === 0) {
       _type = 'INTEGER'
     }
@@ -119,6 +120,23 @@ class DDLGenerator {
     if (elem.primaryKey || !elem.nullable) {
       line += ' NOT NULL'
     }
+	if (codegen.getBooleanTagValue("auto_increment", elem)) {
+		line += ' AUTO_INCREMENT'
+	}
+	def_value = codegen.getStringTagValue("default", elem)
+	if (def_value !== '') {
+		//No Apostrophes for these values
+		if (def_value == 'CURRENT_TIMESTAMP' || 
+			def_value == 'CURRENT_DATE' || 
+			def_value == 'NULL') {
+			line += ' DEFAULT ' + def_value
+		} else {
+			line += ' DEFAULT \'' + def_value + '\''
+		}
+	}
+	if (options.generateComments && elem.documentation !== '') {
+		line += ' COMMENT \'' + elem.documentation + '\''
+	}
     return line
   }
 
@@ -197,6 +215,7 @@ class DDLGenerator {
     var lines = []
     var primaryKeys = []
     var uniques = []
+	var line = ''
 
     // Table
     codeWriter.writeLine('CREATE TABLE ' + self.getId(elem.name, options) + ' (')
@@ -229,7 +248,16 @@ class DDLGenerator {
     }
 
     codeWriter.outdent()
-    codeWriter.writeLine(');')
+	line = ')'
+	if (options.dbms === 'mysql') {
+		line += ' ENGINE=' + options.mySqlEngine
+	}
+	if (options.generateComments && elem.documentation !== '') {
+		line += ' COMMENT=\'' + elem.documentation + '\''
+	}
+	line += ';'
+	
+	codeWriter.writeLine(line)
     codeWriter.writeLine()
   }
 

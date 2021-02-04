@@ -98,6 +98,40 @@ CREATE TABLE entity1 (...);
 ...
 ```
 
+* If `Generate Comments` option is selected, COMMENT statements will be included, both in columns and tables.
+```sql
+CREATE TABLE `entity1` (
+    `col1` INTEGER COMMENT 'Comment 1',
+    `col2` VARCHAR(20) COMMENT 'Comment 2',
+    ...
+) COMMENT='Table comment';
+```
+
+* If using MySQL, the selected engine will be added to every CREATE TABLE statement.
+```sql
+CREATE TABLE `entity1` (
+    `col1` INTEGER,
+    `col2` VARCHAR(20),
+    ...
+) ENGINE=InnoDB;
+```
+
+* If an `auto_increment` tag is added to an entity column with the `true` value, an AUTO_INCREMENT statement will be included in that column.
+```sql
+CREATE TABLE `entity1` (
+    `col1` INTEGER AUTO_INCREMENT,
+    ...
+);
+```
+
+* If a `default` tag is added to an entity column, a DEFAULT statement will be included in that column, with the tag value.
+```sql
+CREATE TABLE `entity1` (
+    `col1` INTEGER DEFAULT '1',
+    `col2` VARCHAR(20) DEFAULT 'Test',
+    ...
+);
+```
 
 Contributions
 -------------
