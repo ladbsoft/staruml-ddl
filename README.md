@@ -98,6 +98,22 @@ CREATE TABLE entity1 (...);
 ...
 ```
 
+* If an `auto_increment` tag is added to an entity column with the `true` value, an AUTO_INCREMENT statement will be included in that column.
+```sql
+CREATE TABLE `entity1` (
+    `col1` INTEGER AUTO_INCREMENT,
+    ...
+);
+```
+
+* If a `default` tag is added to an entity column, a DEFAULT statement will be included in that column, with the tag value.
+```sql
+CREATE TABLE `entity1` (
+    `col1` INTEGER DEFAULT '1',
+    `col2` VARCHAR(20) DEFAULT 'Test',
+    ...
+);
+```
 
 Contributions
 -------------

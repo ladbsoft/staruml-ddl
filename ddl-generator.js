@@ -112,6 +112,7 @@ class DDLGenerator {
     var self = this
     var line = self.getId(elem.name, options)
     var _type = elem.getTypeString()
+	var def_value = ''
     if (_type.trim().length === 0) {
       _type = 'INTEGER'
     }
@@ -119,6 +120,20 @@ class DDLGenerator {
     if (elem.primaryKey || !elem.nullable) {
       line += ' NOT NULL'
     }
+	if (codegen.getBooleanTagValue("auto_increment", elem)) {
+		line += ' AUTO_INCREMENT'
+	}
+	def_value = codegen.getStringTagValue("default", elem)
+	if (def_value !== '') {
+		//No Apostrophes for these values
+		if (def_value == 'CURRENT_TIMESTAMP' || 
+			def_value == 'CURRENT_DATE' || 
+			def_value == 'NULL') {
+			line += ' DEFAULT ' + def_value
+		} else {
+			line += ' DEFAULT \'' + def_value + '\''
+		}
+	}
     return line
   }
 
